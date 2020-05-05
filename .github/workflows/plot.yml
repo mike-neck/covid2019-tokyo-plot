@@ -1,0 +1,62 @@
+# This is a basic workflow to help you get started with Actions
+
+name: update image
+
+on:
+  schedule:
+    - cron: '0 10 * * *'
+
+jobs:
+  update-image:
+    runs-on: ubuntu-18.04
+    env:
+      GROOVY_VERSION: 3.0.3
+
+    steps:
+    - name: setup Java
+      uses: actions/setup-java@v1.3.0
+      with:
+        java-version: '11'
+
+    - uses: actions/checkout@v2
+      name: checkout
+
+    - name: Cache
+      uses: actions/cache@v1.1.2
+      with:
+        path: ~/groovy
+        key: ${{ env.GROOVY_VERSION }}
+
+    - name: check cache
+      id: groovy
+      run: |
+        if [ -x ~/groovy/groovy-${GROOVY_VERSION}/bin/groovy ] ; then
+          echo "::add-path::${HOME}/groovy/groovy-${GROOVY_VERSION}/bin"
+          echo "::set-env name=GROOVY_HOME::${HOME}/groovy-${GROOVY_VERSION}"
+          echo "::set-output name=install_required::no"
+          echo "groovy found"
+        else
+          echo "::set-output name=install_required::yes"
+          echo "groovy not found"
+        fi
+
+    - name: install groovy
+      if: ${{ 'yes' }} == ${{ steps.groovy.output.install_required }}
+      run: |
+        curl -L "https://dl.bintray.com/groovy/maven/apache-groovy-binary-${GROOVY_VERSION}.zip" -o ~/groovy.zip
+        unzip -q ~/groovy.zip -d ~/groovy
+        echo "::add-path::${HOME}/groovy/groovy-${GROOVY_VERSION}/bin"
+        echo "::set-env name=GROOVY_HOME::${HOME}/groovy-${GROOVY_VERSION}"
+
+    - name: date
+      id: date
+      run: echo "::set-output name=value::${date '+%Y-%m-%d'}"
+
+    - name: run script
+      run: groovy ./plot.groovy
+
+    - name: commit and push
+      uses: stefanzweifel/git-auto-commit-action@v4.1.6
+      with:
+        commit_message: Auto ${{ steps.date.outputs.value }}
+
