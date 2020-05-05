@@ -135,7 +135,7 @@ import org.knowm.xchart.XYChart
 import org.knowm.xchart.VectorGraphicsEncoder
 import org.knowm.xchart.VectorGraphicsEncoder.VectorGraphicsFormat
 
-def ch = new XYChart(600, 480)
+def ch = new XYChart(720, 480)
 
 ch.addSeries('日別感染者数', simpleChart.labelsAsDate(), simpleChart.plots)
 ch.addSeries('7日移動平均', averageChart.labelsAsDate(), averageChart.plots)
