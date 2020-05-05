@@ -117,10 +117,6 @@ def range = new DateRange(start: data[0].date, endExclusive: data[data.size()-1]
 
 def simpleChart = new Chart(title:'日別感染者数',labels:range,plots:range.collect { count.get(it) })
 
-//println simpleChart.chart()
-
-println()
-
 def averageChart = new Chart(
   title: '7日移動平均', 
   labels:range,
@@ -129,25 +125,20 @@ def averageChart = new Chart(
   }.collect { count.get(it) }
 )
 
-//println averageChart.chart()
-
-println()
-
 def threeDays = new Chart(
     title: '3日移動平均',
     labels:range,
     plots: range.collect { new DateRange(start:it.minusDays(2), endExclusive: it.next()) }.collect { count.get(it) }
 )
 
-//println threeDays.chart()
-
 import org.knowm.xchart.XYChart
-import org.knowm.xchart.SwingWrapper
+import org.knowm.xchart.VectorGraphicsEncoder
+import org.knowm.xchart.VectorGraphicsEncoder.VectorGraphicsFormat
 
 def ch = new XYChart(600, 480)
 
 ch.addSeries('日別感染者数', simpleChart.labelsAsDate(), simpleChart.plots)
 ch.addSeries('7日移動平均', averageChart.labelsAsDate(), averageChart.plots)
 
-new SwingWrapper(ch).displayChart()
+VectorGraphicsEncoder.saveVectorGraphic(ch, 'plot.svg', VectorGraphicsFormat.SVG)
 
