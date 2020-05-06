@@ -41,20 +41,15 @@ jobs:
           echo "::set-output name=install_required::yes"
         fi
 
-    - name: confirm configuration(json)
-      run: echo "${AS_JSON}"
-      env:
-        AS_JSON: ${{ toJson(steps) }}
-
     - name: confirm configuration
       run: |
         echo "install : ${INSTALL_REQUIRED}"
         echo "GROOVY : ${GROOVY_HOME}"
       env:
-        INSTALL_REQUIRED: ${{ steps.groovy.output.install_required }}
+        INSTALL_REQUIRED: ${{ steps.groovy.outputs.install_required }}
 
     - name: install groovy
-      if: startsWith(steps.groovy.output.install_required, 'yes')
+      if: startsWith(steps.groovy.outputs.install_required, 'yes')
       run: |
         curl -L "https://dl.bintray.com/groovy/maven/apache-groovy-binary-${GROOVY_VERSION}.zip" -o ~/groovy.zip
         unzip -q ~/groovy.zip -d ~/groovy
