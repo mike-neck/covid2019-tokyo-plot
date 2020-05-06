@@ -41,6 +41,11 @@ jobs:
           echo "::set-output name=install_required::yes"
         fi
 
+    - name: confirm configuration(json)
+      run: echo "${AS_JSON}"
+      env:
+        AS_JSON: ${{ toJson(steps) }}
+
     - name: confirm configuration
       run: |
         echo "install : ${INSTALL_REQUIRED}"
