@@ -41,7 +41,7 @@ jobs:
         fi
 
     - name: install groovy
-      if: ${{ 'yes' }} == ${{ steps.groovy.output.install_required }}
+      if: startsWith(steps.groovy.output.install_required, 'yes')
       run: |
         curl -L "https://dl.bintray.com/groovy/maven/apache-groovy-binary-${GROOVY_VERSION}.zip" -o ~/groovy.zip
         unzip -q ~/groovy.zip -d ~/groovy
