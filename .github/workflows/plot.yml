@@ -34,13 +34,11 @@ jobs:
       id: groovy
       run: |
         if [ -x ~/groovy/groovy-${GROOVY_VERSION}/bin/groovy ] ; then
-          echo "::add-path::${HOME}/groovy/groovy-${GROOVY_VERSION}/bin"
-          echo "::set-env name=GROOVY_HOME::${HOME}/groovy-${GROOVY_VERSION}"
-          echo "::set-output name=install_required::no"
           echo "groovy found"
+          echo "::set-output name=install_required::no"
         else
-          echo "::set-output name=install_required::yes"
           echo "groovy not found"
+          echo "::set-output name=install_required::yes"
         fi
 
     - name: confirm configuration
@@ -55,8 +53,13 @@ jobs:
       run: |
         curl -L "https://dl.bintray.com/groovy/maven/apache-groovy-binary-${GROOVY_VERSION}.zip" -o ~/groovy.zip
         unzip -q ~/groovy.zip -d ~/groovy
-        echo "::add-path::${HOME}/groovy/groovy-${GROOVY_VERSION}/bin"
-        echo "::set-env name=GROOVY_HOME::${HOME}/groovy-${GROOVY_VERSION}"
+
+    - name: set PATH
+      run: echo "::add-path::${HOME}/groovy/groovy-${GROOVY_VERSION}/bin"
+
+    - name: set GROOVY_HOME
+      run: echo "::set-env name=GROOVY_HOME::${HOME}/groovy-${GROOVY_VERSION}"
+
 
     - name: date
       id: date
