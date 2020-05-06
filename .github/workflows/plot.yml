@@ -50,7 +50,9 @@ jobs:
 
     - name: date
       id: date
-      run: echo "::set-output name=value::${date '+%Y-%m-%d'}"
+      run: |
+        now=$(date '+%Y-%m-%d')
+        echo "::set-output name=value::${now}"
 
     - name: run script
       run: groovy ./plot.groovy
