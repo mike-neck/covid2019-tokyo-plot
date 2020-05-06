@@ -5,6 +5,9 @@ name: update image
 on:
   schedule:
     - cron: '10 10 * * *'
+  push:
+    branches:
+      - master
 
 jobs:
   update-image:
@@ -39,6 +42,13 @@ jobs:
           echo "::set-output name=install_required::yes"
           echo "groovy not found"
         fi
+
+    - name: confirm configuration
+      run: |
+        echo "install : ${INSTALL_REQUIRED}"
+        echo "GROOVY : ${GROOVY_HOME}"
+      env:
+        INSTALL_REQUIRED: ${{ steps.groovy.output.install_required }}
 
     - name: install groovy
       if: startsWith(steps.groovy.output.install_required, 'yes')
