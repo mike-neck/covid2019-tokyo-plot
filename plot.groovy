@@ -2,6 +2,7 @@
 
 import java.time.*
 import groovy.transform.Canonical
+import groovy.transform.ToString
 
 def csvFile = new URL('https://stopcovid19.metro.tokyo.lg.jp/data/130001_tokyo_covid19_patients.csv')
 
@@ -49,7 +50,7 @@ def data = csvFile.text.collectLine { it.split(',') }.collectNotNull {
         println e
         println it
     }
-}
+}.sort { it.date }
 
 LocalDate.metaClass.define {
     next = {
@@ -57,6 +58,7 @@ LocalDate.metaClass.define {
     }
 }
 
+@ToString
 class DateRange implements Iterable<LocalDate> {
     LocalDate start
     LocalDate endExclusive
@@ -73,6 +75,7 @@ class DateRange implements Iterable<LocalDate> {
     }
 }
 
+@ToString
 class Count {
     Map<LocalDate, Integer> count
 
@@ -89,7 +92,7 @@ class Count {
 
 def count = new Count(count: data.countBy { it.date })
 
-
+@ToString
 class Chart {
   String title
   Iterable<LocalDate> labels
@@ -137,8 +140,12 @@ import org.knowm.xchart.VectorGraphicsEncoder.VectorGraphicsFormat
 
 def ch = new XYChart(720, 480)
 
+println '日別'
+println simpleChart
+println '移動平均'
+println averageChart
+
 ch.addSeries('日別感染者数', simpleChart.labelsAsDate(), simpleChart.plots)
 ch.addSeries('7日移動平均', averageChart.labelsAsDate(), averageChart.plots)
 
 VectorGraphicsEncoder.saveVectorGraphic(ch, 'plot.svg', VectorGraphicsFormat.SVG)
-
