@@ -149,3 +149,35 @@ ch.addSeries('日別感染者数', simpleChart.labelsAsDate(), simpleChart.plots
 ch.addSeries('7日移動平均', averageChart.labelsAsDate(), averageChart.plots)
 
 VectorGraphicsEncoder.saveVectorGraphic(ch, 'plot.svg', VectorGraphicsFormat.SVG)
+
+@ToString
+class Recent {
+    LocalDate date
+    int count
+
+    String getTable() {
+"""
+^|${date}
+>s|${count}
+"""
+    }
+}
+
+def recent = range.takeRight(3)
+  .collect {
+    new Recent(date: it, count: count.get(it))
+  }
+
+new File('recent.adoc').write(
+"""
+.recent 3 days
+|===
+
+|date|new
+
+${recent.collect { it.table }.join('\n') }
+
+"""
+)
+
+println recent
