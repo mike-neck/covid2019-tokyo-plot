@@ -155,7 +155,7 @@ class Recent {
     LocalDate date
     int count
 
-    String getTable() {
+    String table() {
 """
 ^|${date}
 >s|${count}
@@ -175,8 +175,11 @@ new File('recent.adoc').write(
 
 |date|new
 
-${recent.collect { it.table }.join('\n') }
+${recent.collect { it.table() }.join('\n') }
 
+|===
+
+created at: ${Instant.now()}
 """
 )
 
