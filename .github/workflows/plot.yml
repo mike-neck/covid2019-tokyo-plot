@@ -56,8 +56,10 @@ jobs:
       run: echo "::add-path::${HOME}/groovy/groovy-${GROOVY_VERSION}/bin"
 
     - name: set GROOVY_HOME
-      run: echo "::set-env name=GROOVY_HOME::${HOME}/groovy-${GROOVY_VERSION}"
+      run: echo "GROOVY_HOME=${HOME}/groovy-${GROOVY_VERSION}" >> $GITHUB_ENV
 
+    - name: show github env
+      run: echo "${GITHUB_ENV}"
 
     - name: date
       id: date
