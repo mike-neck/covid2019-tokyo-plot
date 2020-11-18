@@ -53,7 +53,10 @@ jobs:
         unzip -q ~/groovy.zip -d ~/groovy
 
     - name: set PATH
-      run: echo "::add-path::${HOME}/groovy/groovy-${GROOVY_VERSION}/bin"
+      run: echo "${HOME}/groovy/groovy-${GROOVY_VERSION}/bin" >> $GITHUB_PATH
+
+    - name: show github path
+      run: echo "${GITHUB_PATH}"
 
     - name: set GROOVY_HOME
       run: echo "GROOVY_HOME=${HOME}/groovy-${GROOVY_VERSION}" >> $GITHUB_ENV
