@@ -5,9 +5,7 @@ name: update image
 on:
   schedule:
     - cron: '10 10 * * *'
-  push:
-    branches:
-      - master
+  workflow_dispatch: {}
 
 jobs:
   update-image:
@@ -17,7 +15,7 @@ jobs:
 
     steps:
     - name: setup Java
-      uses: actions/setup-java@v1.3.0
+      uses: actions/setup-java@v1.4
       with:
         java-version: '11'
 
