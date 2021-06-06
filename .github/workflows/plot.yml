@@ -50,7 +50,7 @@ jobs:
     - name: install groovy
       if: startsWith(steps.groovy.outputs.install_required, 'yes')
       run: |
-        curl -L "https://groovy.jfrog.io/artifactory/dist-release-local/groovy-zips/apache-groovy-binary-${GROOVY_VERSION}.zip"
+        curl -L "https://groovy.jfrog.io/artifactory/dist-release-local/groovy-zips/apache-groovy-binary-${GROOVY_VERSION}.zip" -o ~/groovy.zip
         unzip -q ~/groovy.zip -d ~/groovy
 
     - name: set PATH
